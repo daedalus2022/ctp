@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package abi;
+
+// 请求命令
+message CommandRequest{
+    oneof request_data{
+        MDQversion mdqversion = 1;
+    }
+}
+
+// 行情版本
+message MDQversion{
+    
+}
+
+// 响应
+message CommandResponse{
+    // 状态码
+    uint32 status = 1;
+
+    // 消息
+    string message = 2;
+
+    // 成功返回的values
+    repeated Value values = 3;
+
+    // 成功返回的 Kvpair
+    repeated Kvpair pairs = 4;
+}
+
+
+// 返回值
+message Value{
+
+}
+
+// kv 值
+message Kvpair{
+
+}
