@@ -1,7 +1,15 @@
-// use std::{ffi::{CString, c_int, c_void}, fmt};
-// use ctp_sys::{CThostFtdcMdApi, CThostFtdcMdSpi, CThostFtdcMdApi_Init, CThostFtdcRspUserLoginField, TThostFtdcRequestIDType, CThostFtdcUserLogoutField, CThostFtdcSpecificInstrumentField, CThostFtdcDepthMarketDataField, CThostFtdcForQuoteRspField, CThostFtdcMdApi_RegisterSpi};
+// use ctp_sys::{
+//     CThostFtdcDepthMarketDataField, CThostFtdcForQuoteRspField, CThostFtdcMdApi,
+//     CThostFtdcMdApi_Init, CThostFtdcMdApi_RegisterSpi, CThostFtdcMdSpi,
+//     CThostFtdcRspUserLoginField, CThostFtdcSpecificInstrumentField, CThostFtdcUserLogoutField,
+//     TThostFtdcRequestIDType,
+// };
+// use std::{
+//     ffi::{c_int, c_void, CString},
+//     fmt,
+// };
 
-// use crate::{RspResult, from_rsp_result_to_string};
+// use crate::{from_rsp_result_to_string, RspResult};
 // ///
 // /// 行情API
 // ///
@@ -36,7 +44,7 @@
 // ///
 // /// 行情
 // ///
-// pub struct MdApi{
+// pub struct MdApi {
 //     pub md_api_ptr: *mut CThostFtdcMdApi,
 //     pub registered_spi: Option<*mut CThostFtdcMdSpi>,
 // }
@@ -77,7 +85,7 @@
 //         }
 //     }
 // }
-// pub trait MdSpi : Send {
+// pub trait MdSpi: Send {
 //     fn on_front_connected(&mut self) {
 //         println!("on_front_connected");
 //     }
@@ -87,42 +95,127 @@
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rsp_user_login(&mut self, rsp_user_login: Option<&CThostFtdcRspUserLoginField>, result: RspResult, request_id: TThostFtdcRequestIDType, is_last: bool) {
-//         println!("on_rsp_user_login: {:?}, {}, {:?}, {:?}", rsp_user_login, from_rsp_result_to_string(&result), request_id, is_last);
+//     fn on_rsp_user_login(
+//         &mut self,
+//         rsp_user_login: Option<&CThostFtdcRspUserLoginField>,
+//         result: RspResult,
+//         request_id: TThostFtdcRequestIDType,
+//         is_last: bool,
+//     ) {
+//         println!(
+//             "on_rsp_user_login: {:?}, {}, {:?}, {:?}",
+//             rsp_user_login,
+//             from_rsp_result_to_string(&result),
+//             request_id,
+//             is_last
+//         );
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rsp_user_logout(&mut self, rsp_user_logout: Option<&CThostFtdcUserLogoutField>, result: RspResult, request_id: TThostFtdcRequestIDType, is_last: bool) {
-//         println!("on_rsp_user_logout: {:?}, {}, {:?}, {:?}", rsp_user_logout, from_rsp_result_to_string(&result), request_id, is_last);
+//     fn on_rsp_user_logout(
+//         &mut self,
+//         rsp_user_logout: Option<&CThostFtdcUserLogoutField>,
+//         result: RspResult,
+//         request_id: TThostFtdcRequestIDType,
+//         is_last: bool,
+//     ) {
+//         println!(
+//             "on_rsp_user_logout: {:?}, {}, {:?}, {:?}",
+//             rsp_user_logout,
+//             from_rsp_result_to_string(&result),
+//             request_id,
+//             is_last
+//         );
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rsp_error(&mut self, result: RspResult, request_id: TThostFtdcRequestIDType, is_last: bool) {
-//         println!("on_rsp_error: {}, {:?}, {:?}", from_rsp_result_to_string(&result), request_id, is_last);
+//     fn on_rsp_error(
+//         &mut self,
+//         result: RspResult,
+//         request_id: TThostFtdcRequestIDType,
+//         is_last: bool,
+//     ) {
+//         println!(
+//             "on_rsp_error: {}, {:?}, {:?}",
+//             from_rsp_result_to_string(&result),
+//             request_id,
+//             is_last
+//         );
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rsp_sub_market_data(&mut self, specific_instrument: Option<&CThostFtdcSpecificInstrumentField>, result: RspResult, request_id: TThostFtdcRequestIDType, is_last: bool) {
-//         println!("on_rsp_sub_market_data: {:?}, {}, {:?}, {:?}", specific_instrument, from_rsp_result_to_string(&result), request_id, is_last);
+//     fn on_rsp_sub_market_data(
+//         &mut self,
+//         specific_instrument: Option<&CThostFtdcSpecificInstrumentField>,
+//         result: RspResult,
+//         request_id: TThostFtdcRequestIDType,
+//         is_last: bool,
+//     ) {
+//         println!(
+//             "on_rsp_sub_market_data: {:?}, {}, {:?}, {:?}",
+//             specific_instrument,
+//             from_rsp_result_to_string(&result),
+//             request_id,
+//             is_last
+//         );
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rsp_un_sub_market_data(&mut self, specific_instrument: Option<&CThostFtdcSpecificInstrumentField>, result: RspResult, request_id: TThostFtdcRequestIDType, is_last: bool) {
-//         println!("on_rsp_un_sub_market_data: {:?}, {}, {:?}, {:?}", specific_instrument, from_rsp_result_to_string(&result), request_id, is_last);
+//     fn on_rsp_un_sub_market_data(
+//         &mut self,
+//         specific_instrument: Option<&CThostFtdcSpecificInstrumentField>,
+//         result: RspResult,
+//         request_id: TThostFtdcRequestIDType,
+//         is_last: bool,
+//     ) {
+//         println!(
+//             "on_rsp_un_sub_market_data: {:?}, {}, {:?}, {:?}",
+//             specific_instrument,
+//             from_rsp_result_to_string(&result),
+//             request_id,
+//             is_last
+//         );
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rsp_sub_for_quote_rsp(&mut self, specific_instrument: Option<&CThostFtdcSpecificInstrumentField>, result: RspResult, request_id: TThostFtdcRequestIDType, is_last: bool) {
-//         println!("on_rsp_sub_for_quote_rsp: {:?}, {}, {:?}, {:?}", specific_instrument, from_rsp_result_to_string(&result), request_id, is_last);
+//     fn on_rsp_sub_for_quote_rsp(
+//         &mut self,
+//         specific_instrument: Option<&CThostFtdcSpecificInstrumentField>,
+//         result: RspResult,
+//         request_id: TThostFtdcRequestIDType,
+//         is_last: bool,
+//     ) {
+//         println!(
+//             "on_rsp_sub_for_quote_rsp: {:?}, {}, {:?}, {:?}",
+//             specific_instrument,
+//             from_rsp_result_to_string(&result),
+//             request_id,
+//             is_last
+//         );
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rsp_un_sub_for_quote_rsp(&mut self, specific_instrument: Option<&CThostFtdcSpecificInstrumentField>, result: RspResult, request_id: TThostFtdcRequestIDType, is_last: bool) {
-//         println!("on_rsp_un_sub_for_quote_rsp: {:?}, {}, {:?}, {:?}", specific_instrument, from_rsp_result_to_string(&result), request_id, is_last);
+//     fn on_rsp_un_sub_for_quote_rsp(
+//         &mut self,
+//         specific_instrument: Option<&CThostFtdcSpecificInstrumentField>,
+//         result: RspResult,
+//         request_id: TThostFtdcRequestIDType,
+//         is_last: bool,
+//     ) {
+//         println!(
+//             "on_rsp_un_sub_for_quote_rsp: {:?}, {}, {:?}, {:?}",
+//             specific_instrument,
+//             from_rsp_result_to_string(&result),
+//             request_id,
+//             is_last
+//         );
 //     }
 
 //     #[allow(unused_variables)]
-//     fn on_rtn_depth_market_data(&mut self, depth_market_data: Option<&CThostFtdcDepthMarketDataField>) {
+//     fn on_rtn_depth_market_data(
+//         &mut self,
+//         depth_market_data: Option<&CThostFtdcDepthMarketDataField>,
+//     ) {
 //         println!("on_rtn_depth_market_data: {:?}", depth_market_data);
 //     }
 
@@ -132,17 +225,21 @@
 //     }
 // }
 
-// impl MdService for MdApi{
+// impl MdService for MdApi {
 //     ///
 //     /// 创建
 //     ///
 //     fn new(flow_path: String, use_udp: bool, use_multicast: bool) -> Self {
-//         let flow_path_cstring= CString::new(flow_path).unwrap();
+//         let flow_path_cstring = CString::new(flow_path).unwrap();
 //         let flow_path_ptr = flow_path_cstring.into_raw();
-//         let api = unsafe { CThostFtdcMdApi::CreateFtdcMdApi(flow_path_ptr, use_udp, use_multicast) };
+//         let api =
+//             unsafe { CThostFtdcMdApi::CreateFtdcMdApi(flow_path_ptr, use_udp, use_multicast) };
 //         let flow_path = unsafe { CString::from_raw(flow_path_ptr) };
 //         drop(flow_path);
-//         MdApi{ md_api_ptr: api, registered_spi: None }
+//         MdApi {
+//             md_api_ptr: api,
+//             registered_spi: None,
+//         }
 //     }
 
 //     ///
@@ -155,7 +252,7 @@
 //     fn register_spi(&mut self, md_spi: Box<dyn MdSpi>) {
 //         let last_registered_spi_ptr: Option<*mut CThostFtdcMdSpi> = self.registered_spi.take();
 //         let md_spi_ptr = Box::into_raw(md_spi);
-//         let spi_ptr = Box::into_raw(Box::new(CThostFtdcMdSpi{ _address: todo!() }));
+//         let spi_ptr = Box::into_raw(Box::new(CThostFtdcMdSpi { _address: todo!() }));
 //         unsafe { CThostFtdcMdApi_RegisterSpi(self.md_api_ptr, spi_ptr) };
 //         self.registered_spi = Some(spi_ptr);
 //         if let Some(last_registered_spi_ptr) = last_registered_spi_ptr {
@@ -167,13 +264,9 @@
 //     }
 // }
 
-// pub struct SpiApi{
+// // pub struct SpiApi {}
 
-// }
-
-// impl MdSpi for SpiApi{
-
-// }
+// // impl MdSpi for SpiApi {}
 
 // // impl CThostFtdcMdSpi {
 // //     #[inline]

@@ -25,4 +25,32 @@ pub struct MdQversion {}
 #[derive(PartialOrd)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CommandResponse {}
+pub struct CommandResponse {
+    /// 状态码
+    #[prost(uint32, tag = "1")]
+    pub status: u32,
+    /// 消息
+    #[prost(string, tag = "2")]
+    pub message: ::prost::alloc::string::String,
+    /// 成功返回的values
+    #[prost(message, repeated, tag = "3")]
+    pub values: ::prost::alloc::vec::Vec<Value>,
+}
+/// 返回值
+#[derive(PartialOrd)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Value {
+    #[prost(oneof = "value::Value", tags = "1")]
+    pub value: ::core::option::Option<value::Value>,
+}
+/// Nested message and enum types in `Value`.
+pub mod value {
+    #[derive(PartialOrd)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Value {
+        #[prost(string, tag = "1")]
+        String(::prost::alloc::string::String),
+    }
+}

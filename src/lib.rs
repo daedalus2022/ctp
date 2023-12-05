@@ -1,10 +1,15 @@
+mod ctp;
+mod error;
 mod ffi_utils;
 mod mdapi;
 mod pb;
 mod service;
 
+pub use ctp::*;
+pub use error::*;
 pub use ffi_utils::*;
 pub use mdapi::*;
+pub use pb::*;
 
 #[cfg(test)]
 mod tests {

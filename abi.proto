@@ -24,18 +24,12 @@ message CommandResponse{
 
     // 成功返回的values
     repeated Value values = 3;
-
-    // 成功返回的 Kvpair
-    repeated Kvpair pairs = 4;
 }
 
 
 // 返回值
 message Value{
-
-}
-
-// kv 值
-message Kvpair{
-
+    oneof value{
+        string string = 1;
+    }
 }
