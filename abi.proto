@@ -33,3 +33,9 @@ message Value{
         string string = 1;
     }
 }
+
+// kv 值
+message Kvpair{
+    string key = 1;
+    Value value = 2;
+}

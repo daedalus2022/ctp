@@ -1,8 +1,6 @@
 mod ctpsys;
 
-use std::ffi::CStr;
-
-use crate::{error::CtpError, CommandResponse};
+use crate::{error::CtpError, Kvpair};
 
 ///
 /// CTP 服务
@@ -10,10 +8,17 @@ use crate::{error::CtpError, CommandResponse};
 pub trait CtpService {
     /// 获取 ctp 版本信息
     fn get_version(&self) -> Result<Option<String>, CtpError>;
+
+    /// 获取服务器状态
+    fn get_status(&self) -> Result<Option<Vec<Kvpair>>, CtpError>;
+
+    /// 添加订阅 [IF2312], 返回 topic ID，通过消费 topicId处理数据
+    fn add_subscribe(&self, symbols: Vec<String>) -> Result<Option<Vec<Kvpair>>, CtpError>;
 }
 
 #[cfg(test)]
 mod tests {
+    use ctp_sys::md_api::{create_api, create_spi};
     use tracing::info;
 
     use super::ctpsys::CtpSys;
@@ -21,7 +26,13 @@ mod tests {
 
     #[test]
     fn ctp_sys_basic_interface_should_work() {
-        let ctp = CtpSys::new();
+        let mdapi = create_api(".", false, false);
+
+        let p_spi = create_spi();
+
+        mdapi.register_spi(p_spi);
+
+        let ctp = CtpSys::new(mdapi);
 
         test_basic_interface(ctp);
     }
