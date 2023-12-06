@@ -129,7 +129,7 @@ impl CtpService for CtpSys {
 
                             let d = chrono::Local::now();
 
-                            for x in rec_c3.recv().await {
+                            while let Some(x) = rec_c3.recv().await {
                                 let mut v = vec![];
                                 let mut d = chrono::Local::now();
                                 for _i in 0..1 {
