@@ -1,14 +1,7 @@
-mod ctpsys;
+pub mod ctpsys;
 
-use std::{ffi::CString, fs};
+use std::fs;
 
-use ctp_sys::{
-    ascii_cstr_to_str_i8,
-    md_api::{create_api, create_spi},
-    print_rsp_info, set_cstr_from_str_truncate_i8, trading_day_from_ctp_trading_day,
-    CThostFtdcReqUserLoginField, CtpAccountConfig,
-};
-use futures::{Future, StreamExt};
 use tracing::info;
 
 use crate::{error::CtpError, Kvpair};
@@ -40,16 +33,10 @@ pub trait CtpService {
 
 #[cfg(test)]
 mod tests {
-    use std::{ffi::CString, fs, sync::Arc};
+    use std::sync::Arc;
 
-    use ctp_sys::{
-        ascii_cstr_to_str_i8,
-        md_api::{create_api, create_spi},
-        print_rsp_info, set_cstr_from_str_truncate_i8, trading_day_from_ctp_trading_day,
-        CThostFtdcReqUserLoginField, CtpAccountConfig,
-    };
-    use futures::StreamExt;
-    use tokio::sync::{mpsc, oneshot, Mutex};
+    use ctp_sys::CtpAccountConfig;
+    use tokio::sync::{mpsc, Mutex};
     use tracing::info;
 
     use super::ctpsys::CtpSys;
@@ -78,19 +65,19 @@ mod tests {
 
         info!("完成保存查询结果");
 
-        let (ctp_sender, mut ctp_sys_receiver) = mpsc::unbounded_channel::<String>();
+        let (ctp_sender, ctp_sys_receiver) = mpsc::unbounded_channel::<String>();
 
         let ctp = CtpSys::new(
             account,
             (ctp_sender, Arc::new(Mutex::new(ctp_sys_receiver))),
         );
 
-        ctp.init();
+        // ctp.init();
 
-        ctp.add_subscribe(vec!["symbols".to_string()]);
-        tokio::time::sleep(std::time::Duration::from_secs(100)).await;
+        // let _ = ctp.add_subscribe(vec!["symbols".to_string()]);
+        // tokio::time::sleep(std::time::Duration::from_secs(100)).await;
 
-        // test_basic_interface(ctp);
+        test_basic_interface(ctp);
     }
 
     fn test_basic_interface(ctp: impl CtpService) {

@@ -23,7 +23,7 @@ impl CommandRequest {
 impl CommandService for MdQversion {
     fn execute(self, ctp: &impl CtpService) -> CommandResponse {
         match ctp.get_version() {
-            Ok(Some(value)) => todo!(),
+            Ok(Some(_value)) => todo!(),
             Ok(None) => todo!(),
             Err(_) => todo!(),
         }

@@ -1,19 +1,18 @@
 use std::{
     ffi::{CStr, CString},
     sync::Arc,
-    thread,
 };
 
 use crate::{ctp::check_make_dir, CtpError, CtpService, Kvpair};
 use ctp_sys::{
     ascii_cstr_to_str_i8,
-    md_api::{self, create_api, create_spi},
+    md_api::{create_api, create_spi},
     print_rsp_info, set_cstr_from_str_truncate_i8, trading_day_from_ctp_trading_day,
     CThostFtdcMdApi, CThostFtdcReqUserLoginField, CtpAccountConfig,
 };
-use futures::{Future, StreamExt};
+use futures::StreamExt;
 use tokio::sync::{
-    mpsc::{Receiver, Sender, UnboundedReceiver, UnboundedSender},
+    mpsc::{UnboundedReceiver, UnboundedSender},
     Mutex,
 };
 use tracing::info;
@@ -36,7 +35,7 @@ impl CtpSys {
     ) -> Self {
         Self {
             account: Arc::new(account),
-            md_sender_revice: md_sender_revice,
+            md_sender_revice,
         }
     }
 }
@@ -58,15 +57,15 @@ impl CtpService for CtpSys {
         todo!()
     }
 
-    fn add_subscribe(&self, symbols: Vec<String>) -> Result<Option<Vec<Kvpair>>, CtpError> {
+    fn add_subscribe(&self, _symbols: Vec<String>) -> Result<Option<Vec<Kvpair>>, CtpError> {
         // Implement the add_subscribe function here
-        self.md_sender_revice.0.send("abc".to_string());
+        let _ = self.md_sender_revice.0.send("abc".to_string());
         Ok(None)
     }
 
     fn init(&self) {
         info!("ctp sys init ...");
-        let mut request_id: i32 = 0;
+        let request_id: i32 = 0;
         // let mut get_request_id = || {
         //     request_id += 1;
         //     request_id
@@ -125,11 +124,11 @@ impl CtpService for CtpSys {
                     OnRspUserLogin(ref p) => {
                         info!("OnRspUserLogin");
                         if p.p_rsp_info.as_ref().unwrap().ErrorID == 0 {
-                            let u = p.p_rsp_user_login.unwrap();
+                            let _u = p.p_rsp_user_login.unwrap();
 
-                            let d = chrono::Local::now();
+                            let _d = chrono::Local::now();
 
-                            while let Some(x) = rec_c3.recv().await {
+                            while let Some(_x) = rec_c3.recv().await {
                                 let mut v = vec![];
                                 let mut d = chrono::Local::now();
                                 for _i in 0..1 {

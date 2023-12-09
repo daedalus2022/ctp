@@ -16,7 +16,7 @@ impl fmt::Display for RspError {
     }
 }
 
-#[must_use]
+// #[must_use]
 pub type RspResult = Result<(), RspError>;
 
 pub fn from_rsp_result_to_string(rsp_result: &RspResult) -> String {
