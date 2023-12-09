@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install Protoc
+      uses: arduino/setup-protoc@v2
     - name: FMT
       run: cargo fmt --verbose
     - name: check
