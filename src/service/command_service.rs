@@ -1,5 +1,6 @@
 use crate::{
-    command_request::RequestData, CommandRequest, CommandResponse, CtpService, MdQversion,
+    command_request::RequestData, CommandRequest, CommandResponse, CtpError, CtpService,
+    MdQversion, MdSubscribe, Value,
 };
 
 ///
@@ -17,15 +18,32 @@ impl CommandRequest {
             request_data: Some(RequestData::Mdqversion(MdQversion {})),
         }
     }
+
+    // 行情订阅
+    pub fn new_md_subscribe(instrument_ids: Vec<String>) -> Self {
+        Self {
+            request_data: Some(RequestData::Mdsubscribe(MdSubscribe { instrument_ids })),
+        }
+    }
 }
 
 /// 版本
 impl CommandService for MdQversion {
     fn execute(self, ctp: &impl CtpService) -> CommandResponse {
         match ctp.get_version() {
-            Ok(Some(_value)) => todo!(),
-            Ok(None) => todo!(),
-            Err(_) => todo!(),
+            Ok(Some(value)) => value.into(),
+            Ok(None) => CtpError::CtpGetVersionError("get version is none".into()).into(),
+            Err(e) => e.into(),
+        }
+    }
+}
+
+impl CommandService for MdSubscribe {
+    fn execute(self, ctp: &impl CtpService) -> CommandResponse {
+        match ctp.add_subscribe(self.instrument_ids) {
+            Ok(Some(r)) => Value::from(r).into(),
+            Ok(None) => CtpError::CtpGetVersionError("get version is none".into()).into(),
+            Err(e) => e.into(),
         }
     }
 }

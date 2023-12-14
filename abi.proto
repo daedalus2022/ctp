@@ -5,13 +5,44 @@ package abi;
 // 请求命令
 message CommandRequest{
     oneof request_data{
+        // 获取行情库版本
         MDQversion mdqversion = 1;
+        // 订阅行情
+        MDSubscribe mdsubscribe = 2;
+    }
+}
+
+// ctp command
+message CtpCommand{
+    oneof cmd_data{
+        // 订阅行情
+        MDSubscribe mdsubscribe = 1;
+        // 登录
+        MDLogin mdlogin = 2;
     }
 }
 
 // 行情版本
 message MDQversion{
-    
+
+}
+
+// 登录
+message MDLogin{
+    // 经纪公司代码
+    string broker_id = 1;
+    // 用户代码
+    string user_id = 2;
+    // 密码
+    string password = 3;
+    // 请求id
+    int64 request_id = 4;
+}
+
+// 订阅行情
+message MDSubscribe{
+    // 合约代码池
+    repeated string instrument_ids = 1;
 }
 
 // 响应
@@ -31,6 +62,10 @@ message CommandResponse{
 message Value{
     oneof value{
         string string = 1;
+        bytes binary = 2;
+        int64 integer = 3;
+        double float = 4;
+        bool bool = 5;
     }
 }
 

@@ -1,4 +1,4 @@
-mod ctp;
+mod ctpimpl;
 mod error;
 mod ffi_utils;
 mod mdapi;
@@ -6,11 +6,12 @@ mod pb;
 mod service;
 mod storage;
 
-pub use ctp::*;
+pub use ctpimpl::*;
 pub use error::*;
 pub use ffi_utils::*;
 pub use mdapi::*;
 pub use pb::*;
+pub use service::*;
 pub use storage::*;
 
 #[cfg(test)]
